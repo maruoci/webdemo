@@ -1,4 +1,4 @@
-package com.bluesky.web;
+package com.bluesky.web.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
