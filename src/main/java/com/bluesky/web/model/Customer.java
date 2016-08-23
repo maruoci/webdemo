@@ -6,7 +6,7 @@ package com.bluesky.web.model;
 public class Customer {
     private long id;
     private String name;
-    private String contract;
+    private String contact;
     private String telephone;
     private String email;
     private String remark;
@@ -25,14 +25,6 @@ public class Customer {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getContract() {
-        return contract;
-    }
-
-    public void setContract(String contract) {
-        this.contract = contract;
     }
 
     public String getTelephone() {
@@ -57,5 +49,13 @@ public class Customer {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 }

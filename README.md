@@ -1,23 +1,27 @@
 # webdemo
-## ���������
-    ��ѯ�ͻ�/��ʾ�ͻ��б�/��ʾ�ͻ�������Ϣ/�����ͻ�/�༭�ͻ�/ɾ���ͻ�
-## ��Ʊ��ṹ
-    �������ݿ⡣�������ݿ�ű���webemo.sql
-## ��ƽ���ԭ��
-## ���URL
+## 设计用例：
+    查询客户/显示客户列表/显示客户基本信息/创建客户/编辑客户/删除客户
+## 设计表结构
+    创建数据库。生成数据库脚本。webemo.sql
+## 设计界面原型
+## 设计URL
 
-## ���������
-+ �������ݿ�
-+ ׼����������
-+ ��дģ�Ͳ�model
-+ ��д��������controller
-+ ��д����� service
-+ ��д��Ԫ���� test
-+ ��д��ͼ�� jsp
+## 搭建开发环境
++ 创建数据库
++ 准备开发环境
++ 编写模型层model
++ 编写控制器层controller
++ 编写服务层 service
++ 编写单元测试 test
++ 编写视图层 jsp
 
-## ϸ������������Ż�
-+ ���Ʒ����
-    + ������־����jar����logback�����ļ�������ʹ��slf4j+logback
-    + ����mysql������������mysql�����ļ���
-    + ���ӳ��ù����� common-lang3 �� Collections��
-    + ��Ȼ����mysql�����ļ�������Ҫ����һ��PropsUtil������ȡ�����ļ���
+## 细节完善与代码优化
++ 完善服务层
+    + 添加日志管理jar包与logback配置文件。我们使用slf4j+logback
+    + 添加mysql驱动包，添加mysql配置文件。
+    + 添加常用工具类 common-lang3 和 Collections包
+    + 既然有了mysql配置文件，则需要添加一个PropsUtil类来读取配置文件。
+    + 添加其他工具类，StringUtil , CastUtil , CollectionUtil等。
+    + 添加数据库的DatabaseHelper类，提供sql的connection加载与关闭。
+    + 完善service业务方法。
+    + 添加dbutils的jar包，封装常规的getEntity，findList，Update，Insert操作。并对connection进行池化。

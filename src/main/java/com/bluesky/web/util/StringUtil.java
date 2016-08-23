@@ -1,4 +1,5 @@
-import com.bluesky.web.util;
+package com.bluesky.web.util;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 字符串工具类

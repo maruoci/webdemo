@@ -1,19 +1,25 @@
-import com.bluekey.web.util;
-public final class CollectionUtil{
+package com.bluesky.web.util;
 
-    public static boolean isEmpty(Collection<?> collection){
-        return CollectionUtils.isEmpty(collection);
+import org.apache.commons.collections.MapUtils;
+
+import java.util.Collection;
+import java.util.Map;
+
+public final class CollectionUtil {
+
+    public static boolean isEmpty(Collection<?> collection) {
+        return CollectionUtil.isEmpty(collection);
     }
 
-    public static boolean isNotEmpty(Collection<?> collection){
+    public static boolean isNotEmpty(Collection<?> collection) {
         return !isEmpty(collection);
     }
 
-    public static boolean isEmpty(Map<?,?> map){
+    public static boolean isEmpty(Map<?, ?> map) {
         return MapUtils.isEmpty(map);
     }
 
-    public static boolean isNotEmpty(Map<?,?> map){
+    public static boolean isNotEmpty(Map<?, ?> map) {
         return !isEmpty(map);
     }
 }
