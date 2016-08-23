@@ -2,6 +2,7 @@ package com.bluesky.web.helper;
 
 import com.bluesky.web.util.CollectionUtil;
 import com.bluesky.web.util.PropsUtils;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -27,28 +28,33 @@ public class DatabaseHelper {
     private static final String USERNAME ;
     private static final String PASSWORD ;
 
-    private static final QueryRunner QUERY_RUNNER = new QueryRunner();
-    private static final ThreadLocal<Connection> CONNECTION_HOLDER = new ThreadLocal<Connection>();
+    private static final QueryRunner QUERY_RUNNER ;
+    private static final ThreadLocal<Connection> CONNECTION_HOLDER;
+    private static final BasicDataSource DATA_SOURCE ;
 
     static{
+        CONNECTION_HOLDER = new ThreadLocal<Connection>();
+        QUERY_RUNNER = new QueryRunner();
+
         Properties conf = PropsUtils.loadProps("config.properties");
         DRIVER = conf.getProperty("jdbc.driver");
         URL = conf.getProperty("jdbc.url");
         USERNAME = conf.getProperty("jdbc.username");
         PASSWORD = conf.getProperty("jdbc.password");
 
-        try{
-            Class.forName(DRIVER);
-        }catch(ClassNotFoundException e){
-            LOGGER.info("load jdbc driver failure" , e);
-        }
+        DATA_SOURCE = new BasicDataSource();
+        DATA_SOURCE.setDriverClassName(DRIVER);
+        DATA_SOURCE.setUrl(URL);
+        DATA_SOURCE.setUsername(USERNAME);
+        DATA_SOURCE.setPassword(PASSWORD);
+
     }
 
     public static Connection getConnection(){
         Connection conn = CONNECTION_HOLDER.get();
         if(conn == null){
             try{
-                conn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
+                conn = DATA_SOURCE.getConnection();
             }catch (SQLException e){
                 LOGGER.error("SQL Connection create Failure" , e);
             }finally {
@@ -56,19 +62,6 @@ public class DatabaseHelper {
             }
         }
         return conn;
-    }
-
-    public static void closeConnection(){
-        Connection conn = CONNECTION_HOLDER.get();
-        if(conn != null){
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                LOGGER.error("SQL Connection close Failure" , e);
-            }finally {
-                CONNECTION_HOLDER.remove();
-            }
-        }
     }
 
     /**
@@ -87,8 +80,6 @@ public class DatabaseHelper {
         }catch (SQLException e){
             LOGGER.error("query entity List error " , e);
             throw new RuntimeException(e);
-        }finally {
-            closeConnection();
         }
         return entityList;
     }
@@ -109,8 +100,6 @@ public class DatabaseHelper {
         }catch (SQLException e){
             LOGGER.error("query entity Object error " , e);
             throw new RuntimeException(e);
-        }finally {
-            closeConnection();
         }
         return entity;
     }
@@ -129,8 +118,6 @@ public class DatabaseHelper {
         }catch (SQLException e){
             LOGGER.error("execute Update Object error " , e);
             throw new RuntimeException(e);
-        }finally {
-            closeConnection();
         }
         return rows;
     }
@@ -162,7 +149,7 @@ public class DatabaseHelper {
             LOGGER.error("Cannot update entity : fieldMap is empty !");
             return false;
         }
-        String sql = "UPDATE "+ getTableName(entityClass) = " SET ";
+        String sql = "UPDATE "+ getTableName(entityClass) + " SET ";
         StringBuilder columns = new StringBuilder();
         for(String fieldName : fieldMap.keySet()){
             columns.append(fieldName).append("=?, ");
@@ -181,8 +168,8 @@ public class DatabaseHelper {
         return executeUpdate(sql , id) == 1;
     }
 
-    static String getTableName(String className){
-        return className;
+    static String getTableName(Class className){
+        return className.getSimpleName();
     }
 }
 
